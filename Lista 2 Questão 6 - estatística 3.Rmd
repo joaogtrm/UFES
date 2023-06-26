@@ -1,0 +1,121 @@
+---
+title: "prova p2 séria"
+output: pdf_document
+date: "2023-06-25"
+---
+
+### Questão 6
+
+Iremos montar um data frame com os dados do experimênto da questão
+
+```{r}
+#criação do data frame
+x   <- c(7,8,15,11,9,10,12,17,13,18,19,15,14,18,19,17,16,18,19,25,22,23,18,20)     
+xf  <- factor(c(5,5,5,5,5,5,10,10,10,10,10,10,15,15,15,15,15,15,20,20,20,20,20,20)) # 
+df0 <- data.frame(x,xf) # data frame que representa os dados do experimênto da questão
+# X é a tensão da madeira, variável aleatória de interesse
+# xf é a concentração de madeira de lei na polpa, o fator
+df0
+```
+
+Agora, criaremos um novo data frame em função dos níveis da porcentagem de conentração
+
+```{r}
+#níveis encontrados no fator
+xfl <- levels(df0$xf) 
+xfl
+```
+
+```{r}
+#organizando os dados em listas em função dos níveis(para auxiliar na análise)
+xfl1 <- df0[which(df0$xf=="5"),1]  # 05% de concentração de madeira de lei na polpa
+xfl2 <- df0[which(df0$xf=="10"),1] # 10% de concentração de madeira de lei na polpa
+xfl3 <- df0[which(df0$xf=="15"),1] # 15% de concentração de madeira de lei na polpa
+xfl4 <- df0[which(df0$xf=="20"),1] # 20% de concentração de madeira de lei na polpa
+df1  = list(pcnt_5=xfl1,pcnt_10=xfl2,pcnt_15=xfl3,pcnt_20=xfl4)
+
+df1
+```
+
+1)  Análise descritiva criação de um novo data frame, agora em função dos níveis, junto as medidas de média, variância, desvio padrão e tamanho para cada fator
+
+```{r}
+aux1              <- aggregate(df0$x,by=list(df0$xf),FUN=length)
+aux2              <- aggregate(df0$x,by=list(df0$xf),FUN=mean)
+aux3              <- aggregate(df0$x,by=list(df0$xf),FUN=var)
+aux4              <- aggregate(df0$x,by=list(df0$xf),FUN=sd)
+tab.resumo        <- cbind(aux1,aux2$x,aux3$x,aux4$x)
+names(tab.resumo) <- c("Fator","Tamanho","Media","Variancia","Desvio-Padrao")
+
+tab.resumo
+```
+
+Boxplot para auxiliar na vizualização:
+
+```{r}
+boxplot(df0$x~df0$xf,xlab="tempo de resistência", ylab="concentração de madeira na polpa")
+```
+
+### 2,3, 4 e 5) Agora, realizaremos uma ANOVA, e o teste de bartlett para homocedasticidade
+
+```{r}
+  modelo <- aov(x~xf,data=df0) # definição do modelo
+names(modelo)
+smod <- summary(modelo);smod                # resultado do modelo, contendo soma dos quadrados, grau de liberdade, quadrado médio e razão f
+coefficients(modelo)           # Estimativa dos parâmetros do modelo ANOVA
+bartlett.test(x~xf,data=df0) 
+```
+
+De acrodo com os teste ANOVA, podemos assumir que existe diferença significativa entre a tensão da madeira entre os 4 níveis de concentração de madeira na polpa.Porém, pelo teste de bartlett, temos que a variância é constante para os diferentes níveis do fator do fator.
+
+A hipotese de igualdade de médias foi rejeitada, então apresentaremos estimativas intervalares para elas, além de realizar um procedimênto de comparações múltiplas para determinar quais diferenças entre médias são significativas.
+
+6) Estimação intervalar
+
+```{r}
+# Numero de niveis de tamanhos amostrais dos fatores 
+
+I <- length(levels(df0$xf))       # numero de niveis do fator
+n1 <- length(which(df0$xf=="05")) # tamanho da amostra da populacao 1
+n2 <- length(which(df0$xf=="10")) # tamanho da amostra da populacao 2
+n3 <- length(which(df0$xf=="15")) # tamanho da amostra da populacao 3
+n4 <- length(which(df0$xf=="20")) # tamanho da amostra da populacao 4
+n5 <- length(which(df0$xf=="25")) # tamanho da amostra da populacao 5
+n <- n1+n2+n3+n4+n5               # tamanho da amostral total
+
+#Estimativa intervalar para as médias
+
+ic.mu1 <- confint(modelo)[1,]
+ic.mu2 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[2])
+ic.mu3 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[3])
+ic.mu4 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[4])
+ic.mu1 # estimativa para 05% de concentração 
+ic.mu2 # Estimativa para 10% de concentração 
+ic.mu3 # Estimativa para 15% de concentração 
+ic.mu4 # Estimativa para 20% de concentração 
+
+```
+7) Agora, utilizaremos o método de Tukey para realizar comparações múltiplas entre as médias dos diferentes níveis do fator
+```{r}
+tukey <- TukeyHSD(modelo);tukey
+plot(tukey,las=2)
+```
+Pelo resultado do método de Tukey, podemos afirmar que que apenas no intervalo de 10% de concetração a 
+15% de concentração não existe diferença estatísticamente significativa entre as médias 
+
+8 e 9) Agroa, apresentaremos uma Análise residual residual para verificar a adequação do modelo proposto 
+```{r}
+r_squared <- smod[[1]]$`Pr(>F)`[1] # coeficiente de explicação 
+sq.residual <- sum(residuals(modelo)^(2))
+sigma.hat2 <- sq.residual/df.residual(modelo)
+sigma.hat <- sqrt(sigma.hat2)
+par(mfrow=c(2,2))
+boxplot(modelo$residuals~modelo$model[,2],xlab="concentração de madeira na polpa",ylab=expression(r),
+        names=c("05","10","15","20"),col=c("tan","tan1","tan2","tan3"))
+plot(modelo$residuals~modelo$fitted.values,xlab="Valores ajustados",ylab=expression(r))
+qqnorm(modelo$residuals/sigma.hat,xlab="Quantis teóricos",ylab=expression(u==r/hat(sigma)),main="")
+qqline(modelo$residuals/sigma.hat,col="red")
+plot(modelo$fitted.values,sqrt(abs(modelo$residuals/sigma.hat)),
+     xlab="Valores ajustados",ylab=expression(sqrt(abs(u))))
+```
+

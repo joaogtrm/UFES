@@ -1,5 +1,5 @@
 ---
-title: "prova p2 séria"
+title: "Quesão 6, lista 2"
 output: pdf_document
 date: "2023-06-25"
 ---
@@ -22,16 +22,15 @@ Agora, criaremos um novo data frame em função dos níveis da porcentagem de co
 
 ```{r}
 #níveis encontrados no fator
-xfl <- levels(df0$xf) 
-xfl
+xfl <- levels(df0$xf);xfl
 ```
 
 ```{r}
 #organizando os dados em listas em função dos níveis(para auxiliar na análise)
-xfl1 <- df0[which(df0$xf=="5"),1]  # 05% de concentração de madeira de lei na polpa
-xfl2 <- df0[which(df0$xf=="10"),1] # 10% de concentração de madeira de lei na polpa
-xfl3 <- df0[which(df0$xf=="15"),1] # 15% de concentração de madeira de lei na polpa
-xfl4 <- df0[which(df0$xf=="20"),1] # 20% de concentração de madeira de lei na polpa
+xfl1 <- df0[which(df0$xf=="5"),1]  # 05% de concentracao de madeira de lei na polpa
+xfl2 <- df0[which(df0$xf=="10"),1] # 10% de concentracao de madeira de lei na polpa
+xfl3 <- df0[which(df0$xf=="15"),1] # 15% de concentracao de madeira de lei na polpa
+xfl4 <- df0[which(df0$xf=="20"),1] # 20% de concentracao de madeira de lei na polpa
 df1  = list(pcnt_5=xfl1,pcnt_10=xfl2,pcnt_15=xfl3,pcnt_20=xfl4)
 
 df1
@@ -53,7 +52,7 @@ tab.resumo
 Boxplot para auxiliar na vizualização:
 
 ```{r}
-boxplot(df0$x~df0$xf,xlab="tempo de resistência", ylab="concentração de madeira na polpa")
+boxplot(df0$x~df0$xf,xlab="tempo de resistencia", ylab="concentracao de madeira na polpa")
 ```
 
 ### 2,3, 4 e 5) Agora, realizaremos uma ANOVA, e o teste de bartlett para homocedasticidade
@@ -70,7 +69,7 @@ De acrodo com os teste ANOVA, podemos assumir que existe diferença significativ
 
 A hipotese de igualdade de médias foi rejeitada, então apresentaremos estimativas intervalares para elas, além de realizar um procedimênto de comparações múltiplas para determinar quais diferenças entre médias são significativas.
 
-6) Estimação intervalar
+6)  Estimação intervalar
 
 ```{r}
 # Numero de niveis de tamanhos amostrais dos fatores 
@@ -89,33 +88,35 @@ ic.mu1 <- confint(modelo)[1,]
 ic.mu2 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[2])
 ic.mu3 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[3])
 ic.mu4 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[4])
-ic.mu1 # estimativa para 05% de concentração 
-ic.mu2 # Estimativa para 10% de concentração 
-ic.mu3 # Estimativa para 15% de concentração 
-ic.mu4 # Estimativa para 20% de concentração 
+ic.mu1 # estimativa para 05% de concentracao 
+ic.mu2 # Estimativa para 10% de concentracao 
+ic.mu3 # Estimativa para 15% de concentracao 
+ic.mu4 # Estimativa para 20% de concentracao 
 
 ```
-7) Agora, utilizaremos o método de Tukey para realizar comparações múltiplas entre as médias dos diferentes níveis do fator
+
+7)  Agora, utilizaremos o método de Tukey para realizar comparações múltiplas entre as médias dos diferentes níveis do fator
+
 ```{r}
 tukey <- TukeyHSD(modelo);tukey
 plot(tukey,las=2)
 ```
-Pelo resultado do método de Tukey, podemos afirmar que que apenas no intervalo de 10% de concetração a 
-15% de concentração não existe diferença estatísticamente significativa entre as médias 
 
-8 e 9) Agroa, apresentaremos uma Análise residual residual para verificar a adequação do modelo proposto 
+Pelo resultado do método de Tukey, podemos afirmar que que apenas no intervalo de 10% de concetração a 15% de concentração não existe diferença estatísticamente significativa entre as médias
+
+8 e 9) Agroa, apresentaremos uma Análise residual residual para verificar a adequação do modelo proposto
+
 ```{r}
 r_squared <- smod[[1]]$`Pr(>F)`[1] # coeficiente de explicação 
 sq.residual <- sum(residuals(modelo)^(2))
 sigma.hat2 <- sq.residual/df.residual(modelo)
 sigma.hat <- sqrt(sigma.hat2)
 par(mfrow=c(2,2))
-boxplot(modelo$residuals~modelo$model[,2],xlab="concentração de madeira na polpa",ylab=expression(r),
+boxplot(modelo$residuals~modelo$model[,2],xlab="concentracao de madeira na polpa",ylab=expression(r),
         names=c("05","10","15","20"),col=c("tan","tan1","tan2","tan3"))
 plot(modelo$residuals~modelo$fitted.values,xlab="Valores ajustados",ylab=expression(r))
-qqnorm(modelo$residuals/sigma.hat,xlab="Quantis teóricos",ylab=expression(u==r/hat(sigma)),main="")
+qqnorm(modelo$residuals/sigma.hat,xlab="Quantis teoricos",ylab=expression(u==r/hat(sigma)),main="")
 qqline(modelo$residuals/sigma.hat,col="red")
 plot(modelo$fitted.values,sqrt(abs(modelo$residuals/sigma.hat)),
-     xlab="Valores ajustados",ylab=expression(sqrt(abs(u))))
+xlab="Valores ajustados",ylab=expression(sqrt(abs(u))))
 ```
-

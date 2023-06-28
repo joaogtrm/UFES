@@ -1,0 +1,50 @@
+# Vamos achar os valores de SQ(TOTAL), SQ(ENTRE), E SQ(DENTRO) de duas formas diferentes 
+## Primeiramente, realizaremos todas as contas. Utilizaremos o exemplo 4, em que decidi realizar duas amostragens aleatórias, 
+## para ter uma anova com um fator de mais de dois níveis
+### dados 
+m <- c(04.24, 09.94, 11.31, 11.84, 13.89, 19.97, 21.18, 22.15,
+       22.44, 24.69, 25.20, 25.36, 25.62, 26.96, 27.25, 27.42,
+       29.98, 32.54, 32.98, 34.88, 35.34, 35.44, 35.57, 36.29,
+       37.03, 38.13, 41.88, 44.16, 48.89, 49.78, 51.63, 52.27)
+#### amostragem aleatória, para dois fatores com número de elemetnos iguais
+n=16 
+m1 <- sample(m,n)
+m2 <- setdiff(m, m1)
+#### criação do data frame
+fator <- factor(c("m1", "m2"))
+fator_string <- as.character(fator)
+df <- data.frame(tempo = m, fator)
+#### achando o SQ(DENTRO) ####
+y <- 0
+for (i in fator_string) {
+  y <- y + 16 * sum((mean(df[df$fator == i, "tempo"]) - mean(m))^2)
+}
+
+##### achando o SQ(FORA)####
+x <- 0
+for (i in fator_string) {
+  column <- as.numeric(df[df$fator == i, "tempo"])  # Extract column values based on fator
+  for (k in 1:n) {
+    x <- x + sum((column[k] - mean(column))^2)
+  }
+}
+x <- x
+#### achando o SQ(TOTAL)####
+sqtotal = y+x;sqtotal
+##### achando os mesmos resultados usando o modelo ANOVA #####
+modelo <- aov(tempo~fator, data=df);modelo
+modelo_anova <- anova(modelo);modelo_anova
+x_anova <- modelo_anova$`Sum Sq`[1]
+y_anova <- modelo_anova$`Sum Sq`[2]
+
+###################################################################################################################################################################################################################################
+z <- 0
+for (i in fator_string) {
+  column <- as.numeric(df[df$fator == i, "tempo"])  # Extract column values based on fator
+  for (k in 1:n) {
+    z <- z + sum((column[k] - mean(column))*(mean(column) - mean(m)))
+  }
+  print(z)
+  z <- 0
+}
+Precebemos que os valores de soma de 

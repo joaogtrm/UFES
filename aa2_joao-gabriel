@@ -1,0 +1,259 @@
+---
+title: "aa2_joao_gabriel"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## Questão 1)
+
+A estatística "t" é utilizada para avaliar a proporção de ocorrências do
+evento "1" na amostra, sendo representada por p̂ = n₁/n, enquanto a
+proporção esperada (sob a hipótese nula H₀) é representada por "p".
+Dessa forma, o cálculo de "t" pode ser feito da seguinte maneira: $$
+t = \frac{\frac{n_1}{n}-p}{\sqrt{\frac{p(1-p)}{n}}}
+$$ A estatística "q" está relacionada à frequência de "0's" e "1's".
+Consideramos que essas frequências seguem uma distribuição Bernoulli, em
+que o valor esperado para a frequência de "1's" é np, e para a
+frequência de "0's" é n(1 - p). Dessa forma, o cálculo de "q" pode ser
+realizado da seguinte maneira, considerando n₂ = n - n₁ (frequência de
+"0's"): $$
+q = \frac{{(n_2 - n(1 - p))^2}}{{n(1 - p)}} + \frac{{(n_1 - np)^2}}{{np}}
+$$ $$
+q = \frac{{n_2^2 - 2n_2(n(1 - p)) + n^2(1 - p)^2}}{{n(1 - p)}}
+$$ $$
+q = \frac{{n_2^2 + \frac{{n_1^2}}{{n}} - 2n_1p}}{{np(1 - p)}} + \frac{{np^2 + n - 2n_1p}}{{np(1 - p)}}
+$$ $$
+q = \frac{{np^2 + \frac{{n_1^2}}{{n}} - 2n_1p}}{{p(1 - p)}}
+$$ Para demonstrar que q = t², calculamos t²: $$
+t^2 = \frac{n}{p(1-p)} \left(\frac{n_1}{n} - p\right)^2 = \frac{n \left(\frac{n_1^2}{n^2} - 2p \frac{n_1}{n} + p^2\right)}{p(1-p)} = \frac{\frac{n_1^2}{n} - 2pn_1 + p^2n}{p(1-p)}
+$$ Temos, então, que q = t²
+
+## Questão 2)
+
+Ao substituir as frequências por proporções em q e considerando q̂₁ = 1 -
+p̂₁, q̂₂ = 1 - p̂₂, q₁ = 1 - p₁ e q₂ = 1 - p₂, sob a hipótese nula H₀ : p₁
+= p₂ = p, e consequentemente, H₀ : q₁ = q₂ = q
+
+$$
+\begin{gathered}
+n\left[\frac{\left(\hat{p_1}-p\right)^2}{p}+\frac{\left(\hat{q_1}-q\right)^2}{q}\right]+m\left[\frac{\left(\hat{p_2}-p\right)^2}{p}+\operatorname{frac}\left(\hat{q_2}-q q\right)^2\right]= \\
+\frac{n\left(\hat{p_1}-p\right)^2(1-p)+n\left(1-\hat{p_1}-1+p\right)^2 p+m\left(\hat{p_2}-p\right)^2(1-p)+n\left(1-\hat{p_2}-1+p\right)^2 p}{p}= \\
+\frac{n\left(\hat{p_1}-p\right)^2(1-p)+n\left(p-\hat{p_1}\right)^2 p+m\left(\hat{p_2}-p\right)^2(1-p)+n\left(p-\hat{p_2}\right)^2 p}{p q}= \\
+\frac{n\left(\hat{p_1}-p\right)^2+m\left(\hat{p_2}-p\right)^2}{p q}
+\end{gathered}
+$$
+
+Substituindo $p=\frac{n p_1+m p_2}{n+m}$ e dividindo o numerador e
+denominador por $(n^2 m+m^2 n)$: $$
+q=\frac{\left(\hat{p_1}-\hat{p_2}\right)^2}{p q\left(\frac{1}{n}+\frac{1}{m}\right)}=z^2
+$$
+
+## Questão 3)
+
+### 1-
+
+$$
+\begin{gathered}
+E(y_i) = E(\mu + \epsilon_i) = E(\mu) + E(\epsilon_i) = \mu + 0 = \mu \\
+\operatorname{Var}(y_i) = \operatorname{Var}(\mu + \epsilon_i) = \operatorname{Var}(\mu) + \operatorname{Var}(\epsilon_i) = 0 + \sigma^2 = \sigma^2
+\end{gathered}
+$$ $$
+\begin{array}{r}
+E(y_i y_j) = E[(\mu + \epsilon_i)(\mu + \epsilon_j)] = E(\mu^2 + \mu \epsilon_j + \epsilon_i \mu + \epsilon_i \epsilon_j) = E(\mu^2) + E(\mu \epsilon_j) + E(\epsilon_i \mu) + E(\epsilon_i \epsilon_j) = \\
+\mu^2 + \mu E(\epsilon_j) + \mu E(\epsilon_i) + 0 = \mu^2
+\end{array}
+$$
+
+### 2-
+
+$$
+S Q E=\sum_{i=1}^n\left(\overline{y_i}-\mu\right)^2
+$$ Para encontrar o mínimo, precisamos encontrar a primeira derivada e
+igualá-la a zero. Portanto, $$
+\begin{aligned}
+\frac{d(S Q E)}{d \mu}=\sum_{i=1}^n-2\left(y_i-\mu\right) \rightarrow \sum_{i=1}^n\left(y_i-\mu\right)=0 \rightarrow \sum_{i=1}^n y_i-\sum_{i=1}^n \mu=0 \rightarrow \sum_{i=1} n y_i-n \mu=0 \\
+\qquad \frac{\sum_{i=1}^n y_i}{n}=\mu \rightarrow \mu=\bar{y}
+\end{aligned}
+$$
+
+### 3-
+
+O estimador possui boas propriedades, como ser não-viesado, ou seja, seu
+valor esperado é igual ao parâmetro. Além disso, podemos destacar que
+quanto maior o número de observações $n$, mais próximo ele estará de
+$\mu$ e possui a menor variância entre os estimadores não-viesados.
+
+#### 4-
+
+$$
+  \begin{gathered}
+S Q R=\sum_{i=1}^n\left(y_i-\bar{y}\right)^2=\sum_{i=1}^n y_i^2-\bar{y}^2 \\
+E(S Q R)=\sum_{i=1}^n E\left(y_i^2\right)-E\left(\bar{y}^2\right)=\sum_{i=1}^n \sigma^2+\mu^2-\frac{\sigma^2}{n}-\mu^2=\sum_{i=1}^n \sigma^2-\frac{\sigma^2}{n}=(n-1) \sigma^2 \\
+E\left(\frac{S Q R}{n-1}\right)=0 \rightarrow \text { Estimador não viesado }
+\end{gathered}
+$$
+
+### 5-
+
+Distribuição da média amostral:
+$\bar{y} \sim N\left(\mu, \frac{\sigma^2}{n}\right)$
+
+Distribuição amostral de $T: T \sim T_{(n-1)}$
+
+Distribuição amostral de $Q: Q \sim \chi_{(n-1)}^2$
+
+Distribuição amostral de
+$\hat{\sigma}^2: \hat{\sigma}^2 \sim \chi_{n-1}^2$
+
+### 6-
+
+$I C(\mu, \gamma)\left[\hat{y}_i+t_\gamma(n-2) S_e \sqrt{\frac{1}{n}+\frac{\left(x_i-\bar{x}\right)^2}{\sum\left(x_i-\bar{x}\right)^2}} ; \hat{y}_i-t_\gamma(n-2) S_e \sqrt{\frac{1}{n}+\frac{\left(x_i-\bar{x}\right)^2}{\sum\left(x_i-\bar{x}\right)^2}}\right]$
+
+### 7-
+
+$$
+  I C\left[\sigma^2, \gamma\right]=\left[\frac{(n-1) s^2}{\chi_{(\gamma, n-1)}^2} ; \frac{(n-1) s^2}{\chi_{(\alpha, n-1)}^2}\right]
+$$
+
+### 8-
+
+Primeiramente, calculamos a estatística
+$T=\frac{\sqrt{n}(\overline{(} y)-\mu_0}{s}$, que apresenta uma
+distribuição $t$ - de Student de $n-1$ graus de liberdade. Em seguida,
+fixamos um nível de significância $\alpha$ e usamos a tabela da
+distribuição $t$ - de Student para achar o valor $t_c$ tal que
+$P\left(T<t_c\right)=1-\alpha$. Assim, a região crítica será
+$\left[-t_c, t_c\right]$, ou seja, se $T$ estiver nesse intervalo,
+rejeitamos $H_0$.
+
+### 9-
+
+Primeiramente, calculamos a estatística
+$Q=\frac{(n-1) s^2}{\sigma_0^2}$, que apresenta uma distribuição
+qui-quadrado de $n-1$ graus de liberdade. Em seguida, fixamos um nível
+de significância $\alpha$ e usamos a tabela da distribuição qui-quadrado
+para achar os valores $q_{c 1}$ e $q_{c 2}$ tal que
+$P\left(Q \in R C \mid H_0\right)=\alpha$, sendo que a região crítica é
+dada por $\left(0, q_{c 1}\right] \cup\left[q_{c 2}, \infty\right)$, ou
+seja, se $Q$ estiver nesse intervalo, rejeitamos $H_0$.
+
+### 10-
+
+As hipóteses para os erros são: normalidade, média zero, variância constante e independência. Para testar a normalidade, podemos usar o teste de Shapiro-Wilk ou gerar um gráfico QQ (quantil-quantil) para a distribuição normal, em que o eixo X apresenta os quantis teóricos da distribuição normal e o eixo Y os quantis do resíduo. Assumimos que os resíduos seguem a distribuição normal se os pontos estiverem em torno da reta. Para a variância constante, podemos usar um teste de homocedasticidade, como o teste Barlett, que testa a igualdade das variâncias entre os níveis. Essa igualdade também pode ser visualizada elaborando boxplots para cada nível e comparando a dispersão dos resíduos. Outra ferramenta útil é um gráfico que representa os resíduos em função dos valores ajustados, em que, para termos evidências de variância constante, média zero e independência, os pontos do gráfico devem distribuir-se de forma aleatória em torno da reta que corresponde ao resíduo zero.
+
+
+## Questão 4)
+
+Primeiro, vamos testar as hipóteses:
+
+$$
+\begin{align*}
+H_0 &: \mu = 30 \\
+H_1 &: \mu \neq 30 \\
+\end{align*}
+$$
+
+Para isso, vamos utilizar um teste-t e analisar o seu valor de p.
+
+```{r}
+#Carregando os dados
+dados <- c(04.24, 09.94, 11.31, 11.84, 13.89, 19.97, 21.18,
+22.15, 22.44, 24.69, 25.20, 25.36, 25.62, 26.96, 27.25, 27.42,
+29.98, 32.54, 32.98, 34.88, 35.34, 35.44, 35.57, 36.29,
+37.03, 38.13, 41.88, 44.16, 48.89, 49.78, 51.63, 52.27)
+#Realizando o teste-t
+out <-t.test(x=dados,mu=30,alternative="two.sided"
+,conf.level=0.95); out
+```
+
+```{r}
+out$p.value
+```
+
+Ao definirmos o nível de significância como α = 0.05 e obtermos um
+p-valor de 0.9576505, que é maior que α, podemos concluir que aceitamos
+a hipótese nula. Portanto, com um nível de confiança de 95%, temos
+evidências que suportam a afirmação de que µ = 30.
+
+Além disso, para reforçar nossa decisão, iremos analisar o intervalo de
+confiança de 95% para µ, que também é fornecido pela função
+anteriormente utilizada.
+
+```{r}
+out$conf.int
+```
+
+Assim, podemos determinar que o Intervalo de Confiança (IC) para a
+média, com nível de confiança de 95%, é dado por [25.41819, 34.34743], o
+qual inclui o valor de µ = 30. Além disso, iremos realizar um teste de
+hipótese para a variância utilizando um teste qui-quadrado.
+
+As hipóteses a serem testadas são:
+
+$$
+\begin{align*}
+H_0 &: \sigma^2 = 95 \\
+H_1 &: \sigma^2 \neq 95 \\
+\end{align*}
+$$
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library("EnvStats")
+```
+
+```{r}
+out2 <- varTest(dados,alternative="two.sided",sigma.squared=95,conf.level=0.95,
+data.name="dados"); out2
+```
+
+```{r}
+out2$p.value
+```
+
+O valor p obtido é igual a 0.03321902, enquanto o nível de significância
+α é de 0.05. Com base nesses resultados, observamos que o valor p é
+menor do que α, indicando evidências para rejeitar a hipótese nula de
+que σ² = 95. Além disso, o intervalo de confiança para σ², com nível de
+confiança de 0.95, é dado por [98.55821, 271.03709], o qual 95 não está
+incluso.
+
+## Questão 5
+
+### 1-
+
+$$
+S Q T=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\bar{y}\right)^2
+$$ Vamos adicionar o termo $-\bar{y}_i+\bar{y}_i$, que é igual a zero:
+$$
+S Q T=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(\left(y_{i j}-\bar{y}_i\right)+\left(\overline{y_i}-\bar{y}\right)\right)^2=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\overline{y_i}\right)^2+2 \sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\overline{y_i}\right)\left(\overline{y_i}-\bar{y}\right)+\sum_{i=1}^I \sum_{j=1}^{n_i}\left(\bar{y}_i-\bar{y}\right)^2
+$$ Sabemos que
+$S Q D=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\bar{y}_i\right)^2, S Q E=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(\overline{y_i}-\bar{y}\right)^2$.
+Também podemos provar que
+$2 \sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\bar{y}_i\right)\left(\bar{y}_i-\bar{y}\right)=0$
+: $$
+\sum_{i=1}^I \sum_{j=1}^{n_i}\left(\bar{y}_i-\bar{y}\right)=\sum_{i=1}^I \sum_{j=1}^{n_i} \overline{y_i}-\sum_{i=1}^I \sum_{j=1}^{n_i}=n \bar{y}-n \bar{y}=0
+$$ Logo, concluímos que $$
+S Q T=S Q E+S Q D
+$$
+
+### 2-
+
+Onde $I$ é o número de níveis e $n$ o tamanho da amostra. $\mathrm{O}$
+teste-F é utilizado para indicar se há diferença relevante entre as
+médias dos diferentes níveis. Para aceitar ou rejeitar a hipótese nula
+de que as médias são iguais, usamos a estatística $F$, calculada como
+$F=\frac{Q M E}{Q M D}$. O valor de $F$ será comparado com o valor
+crítico da tabela da distribuição $F$ com graus de liberdade
+$(I-1, n-I)$. Se o valor observado de $F$ for maior que o valor crítico,
+rejeitamos a hipótese nula a um nível de significância $\alpha$.
+
+| Fontes de variação | Graus de liberdade | Soma dos quadrados |      Quadrado médio       |
+|:----------------:|:----------------:|:----------------:|:----------------:|
+|       Entre        |       $I-1$        |        SQE         | $Q M E=\frac{S Q E}{I-1}$ |
+|       Dentro       |       $n-I$        |        SQD         | $Q M D=\frac{S Q D}{n-I}$ |
+|       Total        |       $n-1$        |        SQT         | $Q M T=\frac{S Q T}{n-1}$ |
+
+### 3-
+
+Podemos interpretar a estatística F como a razão entre a variabilidade entre os grupos e a variabilidade dentro dos grupos. Dessa forma, um valor alto indica que a variabilidade das médias entre os grupos é significativamente maior do que a variabilidade dentro dos grupos, o que sugere diferenças nas médias dos grupos. Portanto, para rejeitar a hipótese nula de igualdade das médias dos grupos, é necessário obter um valor alto para a estatística F.

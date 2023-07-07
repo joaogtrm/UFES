@@ -1,8 +1,10 @@
 ---
 title: "aa2_joao_gabriel"
-output: html_document
-editor_options: 
-  markdown: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
     wrap: 72
 ---
 
@@ -34,7 +36,7 @@ $$ Temos, então, que q = t²
 
 Ao substituir as frequências por proporções em q e considerando q̂₁ = 1 -
 p̂₁, q̂₂ = 1 - p̂₂, q₁ = 1 - p₁ e q₂ = 1 - p₂, sob a hipótese nula H₀ : p₁
-= p₂ = p, e consequentemente, H₀ : q₁ = q₂ = q
+= p₂ = p, e consequentemente, H₀ : q₁ = q₂ = q:
 
 $$
 \begin{gathered}
@@ -71,7 +73,7 @@ $$
 $$
 S Q E=\sum_{i=1}^n\left(\overline{y_i}-\mu\right)^2
 $$ Para encontrar o mínimo, precisamos encontrar a primeira derivada e
-igualá-la a zero. Portanto, $$
+igualá-la a zero. Portanto: $$
 \begin{aligned}
 \frac{d(S Q E)}{d \mu}=\sum_{i=1}^n-2\left(y_i-\mu\right) \rightarrow \sum_{i=1}^n\left(y_i-\mu\right)=0 \rightarrow \sum_{i=1}^n y_i-\sum_{i=1}^n \mu=0 \rightarrow \sum_{i=1} n y_i-n \mu=0 \\
 \qquad \frac{\sum_{i=1}^n y_i}{n}=\mu \rightarrow \mu=\bar{y}
@@ -85,7 +87,7 @@ valor esperado é igual ao parâmetro. Além disso, podemos destacar que
 quanto maior o número de observações $n$, mais próximo ele estará de
 $\mu$ e possui a menor variância entre os estimadores não-viesados.
 
-#### 4-
+### 4-
 
 $$
   \begin{gathered}
@@ -141,8 +143,14 @@ seja, se $Q$ estiver nesse intervalo, rejeitamos $H_0$.
 
 ### 10-
 
-As hipóteses para os erros são: normalidade, média zero, variância constante e independência. Para testar a normalidade, podemos usar o teste de Shapiro-Wilk ou gerar um gráfico QQ (quantil-quantil) para a distribuição normal, em que o eixo X apresenta os quantis teóricos da distribuição normal e o eixo Y os quantis do resíduo. Assumimos que os resíduos seguem a distribuição normal se os pontos estiverem em torno da reta. Para a variância constante, podemos usar um teste de homocedasticidade, como o teste Barlett, que testa a igualdade das variâncias entre os níveis. Essa igualdade também pode ser visualizada elaborando boxplots para cada nível e comparando a dispersão dos resíduos. Outra ferramenta útil é um gráfico que representa os resíduos em função dos valores ajustados, em que, para termos evidências de variância constante, média zero e independência, os pontos do gráfico devem distribuir-se de forma aleatória em torno da reta que corresponde ao resíduo zero.
-
+As hipótese para os erros são: normalidade, média zero, variância constante e independência. Para testar a normalidade podemos usar o teste de Shapiro-Wilk ou gerar um gráfico QQ (quantil-quantil) para a distribuição normal, em que o eixo $\mathrm{X}$ apresenta os quantis teóricos da distribuição normal e o eixo $\mathrm{Y}$ os quantis do resíduo, assumimos que os resíduos seguem a distribuição normal se os pontos estiverem em torno da reta. Para a variância constante podemos usar um teste de homocedasticidade, como o teste Barlett, que testa a igualdade das
+variâncias entre os níveis. Essa igualdade também pode ser visualizada
+elaborando boxplots para cada nível e comparando a dispersão dos
+resíduos. Outra ferramenta útil é um gráfico que representa os resíduos
+em função dos valores ajustados, em que, para termos evidências de
+variância constante, média zero e independência, os pontos do gráfico
+devem distribuir-se de forma aleatória em torno da reta que corresponde
+ao resíduo zero.
 
 ## Questão 4)
 
@@ -158,12 +166,12 @@ $$
 Para isso, vamos utilizar um teste-t e analisar o seu valor de p.
 
 ```{r}
-#Carregando os dados
+#Lista com os dados
 dados <- c(04.24, 09.94, 11.31, 11.84, 13.89, 19.97, 21.18,
 22.15, 22.44, 24.69, 25.20, 25.36, 25.62, 26.96, 27.25, 27.42,
 29.98, 32.54, 32.98, 34.88, 35.34, 35.44, 35.57, 36.29,
 37.03, 38.13, 41.88, 44.16, 48.89, 49.78, 51.63, 52.27)
-#Realizando o teste-t
+#teste-t
 out <-t.test(x=dados,mu=30,alternative="two.sided"
 ,conf.level=0.95); out
 ```
@@ -198,7 +206,9 @@ H_0 &: \sigma^2 = 95 \\
 H_1 &: \sigma^2 \neq 95 \\
 \end{align*}
 $$
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+require(EnvStats)
 library("EnvStats")
 ```
 
@@ -227,13 +237,19 @@ S Q T=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\bar{y}\right)^2
 $$ Vamos adicionar o termo $-\bar{y}_i+\bar{y}_i$, que é igual a zero:
 $$
 S Q T=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(\left(y_{i j}-\bar{y}_i\right)+\left(\overline{y_i}-\bar{y}\right)\right)^2=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\overline{y_i}\right)^2+2 \sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\overline{y_i}\right)\left(\overline{y_i}-\bar{y}\right)+\sum_{i=1}^I \sum_{j=1}^{n_i}\left(\bar{y}_i-\bar{y}\right)^2
-$$ Sabemos que
+$$
+
+Sabemos que:
+
 $S Q D=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\bar{y}_i\right)^2, S Q E=\sum_{i=1}^I \sum_{j=1}^{n_i}\left(\overline{y_i}-\bar{y}\right)^2$.
-Também podemos provar que
+
+Também, podemos provar que:
+
 $2 \sum_{i=1}^I \sum_{j=1}^{n_i}\left(y_{i j}-\bar{y}_i\right)\left(\bar{y}_i-\bar{y}\right)=0$
-: $$
+
+portanto: $$
 \sum_{i=1}^I \sum_{j=1}^{n_i}\left(\bar{y}_i-\bar{y}\right)=\sum_{i=1}^I \sum_{j=1}^{n_i} \overline{y_i}-\sum_{i=1}^I \sum_{j=1}^{n_i}=n \bar{y}-n \bar{y}=0
-$$ Logo, concluímos que $$
+$$ Logo, concluímos que: $$
 S Q T=S Q E+S Q D
 $$
 
@@ -256,4 +272,194 @@ rejeitamos a hipótese nula a um nível de significância $\alpha$.
 
 ### 3-
 
-Podemos interpretar a estatística F como a razão entre a variabilidade entre os grupos e a variabilidade dentro dos grupos. Dessa forma, um valor alto indica que a variabilidade das médias entre os grupos é significativamente maior do que a variabilidade dentro dos grupos, o que sugere diferenças nas médias dos grupos. Portanto, para rejeitar a hipótese nula de igualdade das médias dos grupos, é necessário obter um valor alto para a estatística F.
+Podemos interpretar a estatística F como a razão entre a variabilidade
+entre os grupos e a variabilidade dentro dos grupos. Dessa forma, um
+valor alto indica que a variabilidade das médias entre os grupos é
+significativamente maior do que a variabilidade dentro dos grupos, o que
+sugere diferenças nas médias dos grupos. Portanto, para rejeitar a
+hipótese nula de igualdade das médias dos grupos, é necessário obter um
+valor alto para a estatística F.
+
+## Questão 6)
+
+### 1-
+
+Iremos montar um data frame com os dados do experimênto da questão 6
+
+```{r}
+# criação do data frame
+x   <- c(7,8,15,11,9,10,12,17,13,18,19,15,14,18,19,17,16,18,19,25,22,23,18,20)     
+xf  <- factor(c(5,5,5,5,5,5,10,10,10,10,10,10,15,15,15,15,15,15,20,20,20,20,20,20)) 
+df0 <- data.frame(x,xf) # data frame que representa os dados do experimênto da questão
+                        # X é a tensão da madeira, variável aleatória de interesse
+                        # xf é a concentração de madeira de lei na polpa, o fator
+head(df0)
+```
+
+Agora, criaremos um novo data frame em função dos níveis da porcentagem de concentração
+
+```{r}
+# níveis encontrados no fator
+xfl <- levels(df0$xf);xfl
+```
+
+```{r}
+# organizando os dados em listas em função dos níveis(para auxiliar na análise)
+xfl1 <- df0[which(df0$xf=="5"),1]  # 05% de concentração de madeira de lei na polpa
+xfl2 <- df0[which(df0$xf=="10"),1] # 10% de concentração de madeira de lei na polpa
+xfl3 <- df0[which(df0$xf=="15"),1] # 15% de concentração de madeira de lei na polpa
+xfl4 <- df0[which(df0$xf=="20"),1] # 20% de concentração de madeira de lei na polpa
+df1  = list(pcnt_5=xfl1,pcnt_10=xfl2,pcnt_15=xfl3,pcnt_20=xfl4)
+
+df1
+```
+
+Para a análise descritiva, iremos criar um novo data frame, agora em função dos níveis, junto às medidas de tamanho, média, variância, desvio-padrão para cada fator
+
+```{r}
+aux1              <- aggregate(df0$x,by=list(df0$xf),FUN=length)
+aux2              <- aggregate(df0$x,by=list(df0$xf),FUN=mean)
+aux3              <- aggregate(df0$x,by=list(df0$xf),FUN=var)
+aux4              <- aggregate(df0$x,by=list(df0$xf),FUN=sd)
+tab.resumo        <- cbind(aux1,aux2$x,aux3$x,aux4$x)
+names(tab.resumo) <- c("Fator","Tamanho","Media","Variancia","Desvio-Padrao")
+
+tab.resumo
+```
+
+Boxplot para auxiliar na visualização:
+
+```{r}
+boxplot(df0$x~df0$xf,xlab="tempo de resistencia", ylab="concentração de madeira na polpa")
+```
+Por uma análise gráfica, percebemos que o nível de concentração de 15% aparenta ter um variância bem menor que os outros.
+
+### 2-
+
+Agora, realizaremos uma ANOVA:
+
+```{r}
+modelo <- aov(x~xf,data=df0) # definição do modelo
+names(modelo)
+```
+### 3- 
+estimação dos parâmetros:
+```{r}
+cf <- coefficients(modelo)
+names(cf) <- c("5% de concentração de madeira na polpa", "10% de concentração de madeira na polpa", "15% de concentração de madeira na polpa", "20% de concentração de madeira na polpa");data.frame(cf)
+
+
+
+```
+
+De acrodo com os teste ANOVA, podemos assumir que existe diferença significativa entre a tensão da madeira entre os 4 níveis de concentração de madeira na polpa.
+
+### 4- 
+Tabela anova e teste-F:
+```{r}
+options(scipen=999)
+smod <- summary(modelo);smod
+```
+Como o P-Valor é 0.00000359,ou seja, muito menor que 0.05, rejeitamos a hipótese nula, que era de que as médias dos níveis são iguais
+
+
+### 5-
+Em seguida, realizaremos o teste de bartlett para homocedasticidade:
+
+```{r}
+bartlett.test(x~xf,data=df0)
+```
+O p-valor foi maior que 0,05, então não rejeitamos a hipótese nula. Logo, apresentaremos estimativas intervalares para elas, além de realizar um procedimênto de comparações múltiplas para determinar quais diferenças entre médias são significativas.
+
+### 6-  
+Estimação intervalar
+
+```{r}
+# Numero de niveis de tamanhos amostrais dos fatores 
+
+I <- length(levels(df0$xf))       # número de niveis do fator
+n1 <- length(which(df0$xf=="05")) # tamanho da amostra da populacao 1
+n2 <- length(which(df0$xf=="10")) # tamanho da amostra da populacao 2
+n3 <- length(which(df0$xf=="15")) # tamanho da amostra da populacao 3
+n4 <- length(which(df0$xf=="20")) # tamanho da amostra da populacao 4
+n5 <- length(which(df0$xf=="25")) # tamanho da amostra da populacao 5
+n <- n1+n2+n3+n4+n5               # tamanho da amostral total
+
+#Estimativa intervalar para as médias
+
+ic.mu1 <- confint(modelo)[1,]
+ic.mu2 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[2])
+ic.mu3 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[3])
+ic.mu4 <- confint(modelo)[1,]+as.numeric(coefficients(modelo)[4])
+ic.mu1 # estimação para 05% de concentração 
+ic.mu2 # estimação para 10% de concentração 
+ic.mu3 # estimação para 15% de concentração 
+ic.mu4 # estimação para 20% de concentração 
+
+```
+
+### 7-  
+Agora, utilizaremos o método de Tukey para realizar comparações múltiplas entre as médias dos diferentes níveis do fator
+
+```{r}
+tukey <- TukeyHSD(modelo);tukey
+plot(tukey,las=2)
+```
+
+Pelo resultado do método de Tukey, podemos afirmar que que apenas no intervalo de 10% de concetração a 15% de concentração não existe diferença estatísticamente significativa entre as médias
+
+### 8- 
+```{r}
+y <- df0[["x"]]
+tss <- sum((y - mean(y))^2)
+rss <- deviance(modelo) # soma de quadrados residual
+sigma2hat <- rss/df.residual(modelo)
+sigmahat <- sqrt(sigma2hat)
+sigma2hat
+```
+```{r}
+sigmahat
+```
+```{r}
+R2 <- 1-(rss/tss);R2 # coeficiente de explicacao do modelo
+```
+O coeficiente de determinação é uma medida que indica a qualidade do ajuste de um modelo, variando de 0 a 1. Quanto mais próximo de 1, melhor o modelo se ajusta aos dados. Neste caso específico, o coeficiente de determinação é igual a 0.7462432, indicando um bom ajuste do modelo aos dados.
+
+### 9-
+
+Agroa, apresentaremos uma Análise residual residual para verificar a adequação do modelo proposto
+```{r}
+r_squared <- smod[[1]]$`Pr(>F)`[1] # coeficiente de explicação 
+sq.residual <- sum(residuals(modelo)^(2))
+sigma.hat2 <- sq.residual/df.residual(modelo)
+sigma.hat <- sqrt(sigma.hat2)
+par(mfrow=c(2,2))
+boxplot(modelo$residuals~modelo$model[,2],xlab="concentração de madeira na polpa",ylab=expression(r),
+        names=c("05","10","15","20"),col=c("tan","tan1","tan2","tan3"))
+plot(modelo$residuals~modelo$fitted.values,xlab="Valores ajustados",ylab=expression(r))
+qqnorm(modelo$residuals/sigma.hat,xlab="Quantis teoricos",ylab=expression(u==r/hat(sigma)),main="")
+qqline(modelo$residuals/sigma.hat,col="red")
+plot(modelo$fitted.values,sqrt(abs(modelo$residuals/sigma.hat)),
+xlab="Valores ajustados",ylab=expression(sqrt(abs(u))))
+```
+### 10-
+```{r}
+predict(modelo)
+```
+As predições de resistência da medeira, para cada uma das concentrações, são: Concentração 5%: 10, Concentração 10%: 15.66667, Concentração
+15%: 17, Concentração 20%: 21.16667
+
+### questão 7)
+```{r}
+modelo.kw <- kruskal.test(x~xf,data=df0)
+print(modelo.kw)
+```
+Devido ao fato de o valor de p ser menor que o nível de significância, 0.05, podemos rejeitar a hipótese de igualdade entre as médias dos diferentes níveis. Essa conclusão está em conformidade com o resultado do teste realizado na questão anterior.
+
+
+
+
+
+
+
+

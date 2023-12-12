@@ -1,7 +1,8 @@
 ---
-title: "Trabalho final"
+title: "Trabalho final de amostragem"
+author: "João Gabriel Teixeira Ramos Moraes"
+class: "Turma de amostragem"
 output: html_document
-date: "2023-12-10"
 editor_options: 
   markdown: 
     wrap: sentence
@@ -10,11 +11,8 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = F,include = T)
 ```
-
-# Introdução
-
-
-```{r, message=F}
+  
+```{r message=FALSE,echo=F}
 #Bíbliotecas a serem utilizadas
 library(tidyverse)
 library(readxl)
@@ -358,7 +356,7 @@ variancia_estimada <- soma_t/(a*(a-1)*((sum(df_ac$tam)/a)^2))
 ```
 
 
-**Resposta do tópico 4:** O estimador utilizado para estimar a \(\text{proporção populacional}= p = \frac{N_\text{A}}{N}\)(onde \(N_\text{A}\) representa o número de unidades populacionais que possuem o atributo de interesse, nesse caso, o número de pessoas que fumam) foi o estimador \(\text{p}_{c2} = \sum_{\alpha\in A}\frac{T_{\alpha}}{b_\alpha}\).
+**Resposta do tópico 5:** O estimador utilizado para estimar a \(\text{proporção populacional}= p = \frac{N_\text{A}}{N}\)(onde \(N_\text{A}\) representa o número de unidades populacionais que possuem o atributo de interesse, nesse caso, o número de pessoas que fumam) foi o estimador \(\text{p}_{c2} = \sum_{\alpha\in A}\frac{T_{\alpha}}{b_\alpha}\).
 
 A estimativa para a proporção de fumantes foi de `r round(proporcao_estimada,3)`%, com variância de `r variancia_estimada`.
 
@@ -369,7 +367,7 @@ limite_inferior <- proporcao_estimada - qnorm(0.99)*sqrt(variancia_estimada)
 limite_superior <- proporcao_estimada + qnorm(0.99)*sqrt(variancia_estimada)
 ```
 
-Um intervalo de confiança foi construído usando a distribuição assintótica do estimador $\bar{p}$, estratégia possível porque o tamanho da amostra é suficientemente grandeonde.
+**Resposta do tópico 6:** Um intervalo de confiança foi construído usando a distribuição assintótica do estimador $\bar{p}$, estratégia possível porque o tamanho da amostra é suficientemente grandeonde.
 O valor $Z_\frac{\alpha}{2}=-2.33$, retirado da distribuição normal padrão, é utilizado para construir o limite inferior, enquanto o valor $Z_\frac{\alpha}{2}=2.33$, retirado da distribuição normal padrão, é utilizado para construir o limite superior.
 
 Dessa forma, o intervalo de confiança obtido, com 98% de confiança, é de `r paste("(",limite_inferior,",",limite_superior,")")`   
@@ -383,8 +381,8 @@ Se um plano amostral via amostragem estratificada fosse utilizada, considerando 
 
 Considerando os dados populacionais, uma estratificação eficaz seria baseada na variável de ensino. Ao estratificar a população por níveis de escolaridade, podemos observar que indivíduos com graus semelhantes de educação tendem a apresentar rendas mais próximas entre si. Portanto, os estratos formados por essa variável específica têm variâncias internas inferiores à variância global da população.
 
-Essa abordagem estratificada proporciona uma estimativa mais eficiente da renda média, uma vez que a homogeneidade dentro de cada estrato resulta em uma diminuição significativa na variância total do estimador. Dessa forma, a escolha da variável de ensino como critério estratificador é justificada pela sua capacidade de reduzir as variâncias dos estratos, tornando a estimação mais precisa e confiável."
+Essa abordagem estratificada proporciona uma estimativa mais eficiente da renda média, uma vez que a homogeneidade dentro de cada estrato resulta em uma diminuição significativa na variância total do estimador. Dessa forma, a escolha da variável de ensino como critério estratificador é justificada pela sua capacidade de reduzir as variâncias dos estratos, tornando a estimação mais precisa e confiável.
 
 ## Conclusão    
 
-Para estimar a renda média, a abordagem mais indicada seria a Amostragem Estratificada (AE), devido à sua eficácia na redução da variância. Já para o tamanho médio, a Amostragem Aleatória Simples Estratificada (AASs) seria a escolha preferencial, pois apresenta menor variabilidade. Essas metodologias são selecionadas com base na busca por estimativas mais precisas e eficientes, alinhadas às características específicas das variáveis. A combinação de AE e AASs se aproxima mais dos dados populacionais, proporcionando estimativas representativas.
+Para estimar a renda média, a abordagem mais indicada seria a Amostragem Estratificada (AE), devido à sua eficácia na redução da variância. Já para o tamanho médio, a Amostragem Aleatória Simples (AASs) seria a escolha preferencial, pois apresenta menor variabilidade. Essas metodologias são selecionadas com base na busca por estimativas mais precisas e eficientes, alinhadas às características específicas das variáveis. A combinação de AE e AASs se aproxima mais dos dados populacionais, proporcionando estimativas representativas.

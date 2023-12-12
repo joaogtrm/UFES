@@ -23,6 +23,7 @@ library(janitor)
 
 Dados: amostra aleatória simples sem reposição, encontrada na planilha "AmostraSorteada".
 
+
 ```{r include=FALSE}
 ## dados populacionais
 df_pop <- read_excel("C:/Users/joaog/Downloads/Cópia de Trabalho_tipo2-BaseCriada.xlsx", sheet = "População-aTrabalhar")
@@ -43,6 +44,14 @@ df_aas <- df_aas[!duplicated(df_aas$num), ]
 3.    Estimar o total de pessoas que moram na região e apresente a variância dessa estimativa.
 
 4.    Estimar a proporção de fumantes e apresente a variância dessa estimativa. Construir um intervalo de 98% confiança para a proporção populacional.
+```{r}
+paste("media pop renda",mean(df_pop$renda))
+paste("media pop tamanho",mean(df_pop$tam))
+paste("tamanho pop", sum(df_pop$tam))
+paste("proporção", sum(df_pop$fumantes/sum(df_pop$tam)))
+
+```
+
 
 
 
@@ -321,17 +330,6 @@ variancia_real <- var_2
 A estimativa do total de pessoas que moram na região foi de `r total_estimado`, e a estimativa da variância do estimador foi de `r variancia_real`.
 
 ### 5) Estimar a proporção de fumantes e apresente a variância dessa estimativa.
-```{r}
-m <- 3 ## número de conglometados na amostra
-M <- 7 ## número de conglomerados na população
-n <- nrow(df_ac) ##tamanho da amostra
-N <- nrow(df_pop) ## tamanho da população
-
-proporcao_estimada <- sum(df_ac$fumantes)/sum(df_ac$tam)
-
-um_por_n_menos_um_por_N <- (  (1/n) - (1/N) )
-variancia_estimada <- um_por_n_menos_um_por_N *n* proporcao_estimada * (1-proporcao_estimada) / (n-1) ## variância do estimador
-```
 
 ```{r}
 m <- 3 ## número de conglometados na amostra
@@ -340,7 +338,7 @@ n <- nrow(df_ac) ##tamanho da amostra
 N <- nrow(df_pop) ## tamanho da população
 
 a <- m
-Pc2 <- proporcao_estimada
+Pc2 <- sum(df_ac$fumantes)/sum(df_ac$tam)
 
 
 termo <- 0
@@ -385,4 +383,4 @@ Essa abordagem estratificada proporciona uma estimativa mais eficiente da renda 
 
 ## Conclusão    
 
-Para estimar a renda média, a abordagem mais indicada seria a Amostragem Estratificada (AE), devido à sua eficácia na redução da variância. Já para o tamanho médio, a Amostragem Aleatória Simples (AASs) seria a escolha preferencial, pois apresenta menor variabilidade. Essas metodologias são selecionadas com base na busca por estimativas mais precisas e eficientes, alinhadas às características específicas das variáveis. A combinação de AE e AASs se aproxima mais dos dados populacionais, proporcionando estimativas representativas.
+Para estimar a renda média, a abordagem mais indicada seria a Amostragem Estratificada (AE), devido à sua eficácia na redução da variância. Já para o tamanho médio, e proporção de fumantes, a Amostragem por Conglomerados (AC) seria a escolha preferencial, pois apresenta menor variância. Essas metodologias são selecionadas com base na busca por estimativas mais precisas e eficientes, alinhadas às características específicas das variáveis. A combinação de AE e AASs se aproxima mais dos dados populacionais, proporcionando estimativas representativas.

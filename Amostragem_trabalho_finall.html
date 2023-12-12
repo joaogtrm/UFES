@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="João Gabriel Teixeira Ramos Moraes" />
 
-<meta name="date" content="2023-12-10" />
 
-<title>Trabalho final</title>
+<title>Trabalho final de amostragem</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,18 +349,12 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Trabalho final</h1>
-<h4 class="date">2023-12-10</h4>
+<h1 class="title toc-ignore">Trabalho final de amostragem</h1>
+<h4 class="author">João Gabriel Teixeira Ramos Moraes</h4>
 
 </div>
 
 
-<div id="introdução" class="section level1">
-<h1>Introdução</h1>
-<pre class="r"><code>#Bíbliotecas a serem utilizadas
-library(tidyverse)
-library(readxl)
-library(janitor)</code></pre>
 <div id="amostra-aleatória-simppes" class="section level2">
 <h2>Amostra Aleatória simppes</h2>
 <p>Dados: amostra aleatória simples sem reposição, encontrada na
@@ -376,6 +370,14 @@ variância dessa estimativa.</p></li>
 estimativa. Construir um intervalo de 98% confiança para a proporção
 populacional.</p></li>
 </ol>
+<pre class="r"><code>paste(&quot;media pop renda&quot;,mean(df_pop$renda))</code></pre>
+<pre><code>## [1] &quot;media pop renda 4.55341792877609&quot;</code></pre>
+<pre class="r"><code>paste(&quot;media pop tamanho&quot;,mean(df_pop$tam))</code></pre>
+<pre><code>## [1] &quot;media pop tamanho 2.74310274252968&quot;</code></pre>
+<pre class="r"><code>paste(&quot;tamanho pop&quot;, sum(df_pop$tam))</code></pre>
+<pre><code>## [1] &quot;tamanho pop 33507&quot;</code></pre>
+<pre class="r"><code>paste(&quot;proporção&quot;, sum(df_pop$fumantes/sum(df_pop$tam)))</code></pre>
+<pre><code>## [1] &quot;proporção 0.685021040379622&quot;</code></pre>
 <div id="estimar-a-média-populacional-da-renda-e-calcula-a-variância-dessa-estimativa." class="section level3">
 <h3>1) Estimar a média populacional da renda e calcula a variância dessa
 estimativa.</h3>
@@ -669,17 +671,8 @@ M &lt;- 7 ## número de conglomerados na população
 n &lt;- nrow(df_ac) ##tamanho da amostra
 N &lt;- nrow(df_pop) ## tamanho da população
 
-proporcao_estimada &lt;- sum(df_ac$fumantes)/sum(df_ac$tam)
-
-um_por_n_menos_um_por_N &lt;- (  (1/n) - (1/N) )
-variancia_estimada &lt;- um_por_n_menos_um_por_N *n* proporcao_estimada * (1-proporcao_estimada) / (n-1) ## variância do estimador</code></pre>
-<pre class="r"><code>m &lt;- 3 ## número de conglometados na amostra
-M &lt;- 7 ## número de conglomerados na população
-n &lt;- nrow(df_ac) ##tamanho da amostra
-N &lt;- nrow(df_pop) ## tamanho da população
-
 a &lt;- m
-Pc2 &lt;- proporcao_estimada
+Pc2 &lt;- sum(df_ac$fumantes)/sum(df_ac$tam)
 
 
 termo &lt;- 0
@@ -692,13 +685,13 @@ for (i in df_conglomerados){invisible({
   })
 }
 variancia_estimada &lt;- soma_t/(a*(a-1)*((sum(df_ac$tam)/a)^2))</code></pre>
-<p><strong>Resposta do tópico 4:</strong> O estimador utilizado para
+<p><strong>Resposta do tópico 5:</strong> O estimador utilizado para
 estimar a <span class="math inline">\(\text{proporção populacional}= p =
 \frac{N_\text{A}}{N}\)</span>(onde <span class="math inline">\(N_\text{A}\)</span> representa o número de
 unidades populacionais que possuem o atributo de interesse, nesse caso,
 o número de pessoas que fumam) foi o estimador <span class="math inline">\(\text{p}_{c2} = \sum_{\alpha\in
 A}\frac{T_{\alpha}}{b_\alpha}\)</span>.</p>
-<p>A estimativa para a proporção de fumantes foi de 0.685%, com
+<p>A estimativa para a proporção de fumantes foi de 0.679%, com
 variância de 1.8130487^{-5}.</p>
 </div>
 <div id="construir-um-intervalo-de-98-confiança-para-a-proporção-populacional." class="section level3">
@@ -706,16 +699,15 @@ variância de 1.8130487^{-5}.</p>
 populacional.</h3>
 <pre class="r"><code>limite_inferior &lt;- proporcao_estimada - qnorm(0.99)*sqrt(variancia_estimada)
 limite_superior &lt;- proporcao_estimada + qnorm(0.99)*sqrt(variancia_estimada)</code></pre>
-<p>Um intervalo de confiança foi construído usando a distribuição
-assintótica do estimador <span class="math inline">\(\bar{p}\)</span>,
-estratégia possível porque o tamanho da amostra é suficientemente
-grandeonde. O valor <span class="math inline">\(Z_\frac{\alpha}{2}=-2.33\)</span>, retirado da
+<p><strong>Resposta do tópico 6:</strong> Um intervalo de confiança foi
+construído usando a distribuição assintótica do estimador <span class="math inline">\(\bar{p}\)</span>, estratégia possível porque o
+tamanho da amostra é suficientemente grandeonde. O valor <span class="math inline">\(Z_\frac{\alpha}{2}=-2.33\)</span>, retirado da
 distribuição normal padrão, é utilizado para construir o limite
 inferior, enquanto o valor <span class="math inline">\(Z_\frac{\alpha}{2}=2.33\)</span>, retirado da
 distribuição normal padrão, é utilizado para construir o limite
 superior.</p>
 <p>Dessa forma, o intervalo de confiança obtido, com 98% de confiança, é
-de ( 0.675251010880923 , 0.695062147383366 )<br />
+de ( 0.669373711028058 , 0.689184847530501 )<br />
 </p>
 </div>
 </div>
@@ -742,19 +734,19 @@ estrato resulta em uma diminuição significativa na variância total do
 estimador. Dessa forma, a escolha da variável de ensino como critério
 estratificador é justificada pela sua capacidade de reduzir as
 variâncias dos estratos, tornando a estimação mais precisa e
-confiável.”</p>
+confiável.</p>
 </div>
 <div id="conclusão" class="section level2">
 <h2>Conclusão</h2>
 <p>Para estimar a renda média, a abordagem mais indicada seria a
 Amostragem Estratificada (AE), devido à sua eficácia na redução da
-variância. Já para o tamanho médio, a Amostragem Aleatória Simples
-Estratificada (AASs) seria a escolha preferencial, pois apresenta menor
-variabilidade. Essas metodologias são selecionadas com base na busca por
-estimativas mais precisas e eficientes, alinhadas às características
-específicas das variáveis. A combinação de AE e AASs se aproxima mais
-dos dados populacionais, proporcionando estimativas representativas.</p>
-</div>
+variância. Já para o tamanho médio, e proporção de fumantes, a
+Amostragem por Conglomerados (AC) seria a escolha preferencial, pois
+apresenta menor variância. Essas metodologias são selecionadas com base
+na busca por estimativas mais precisas e eficientes, alinhadas às
+características específicas das variáveis. A combinação de AE e AASs se
+aproxima mais dos dados populacionais, proporcionando estimativas
+representativas.</p>
 </div>
 
 

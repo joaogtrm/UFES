@@ -17,7 +17,7 @@ library(tidyverse)
 
 ratings <- read_rds("C:/Users/joao.g.moraes/Downloads/ratings.rds")
 movies_metadata <- read_rds("C:/Users/joao.g.moraes/Downloads/TMDB_movie_dataset_v11.rds") %>% rename(movieId=id)
-resultado <- left_join(ratings, movies_metadata, by = "movieid")
+resultado <- left_join(ratings, movies_metadata, by = "movieId")
 ```
 
 
@@ -75,86 +75,33 @@ freq(movies_metadata$belongs_to_collection)
 ```
 
 ```{r}
-separa_dummy <- function(vector){
-  vector <- movies_metadata$genres
+separa_dummy <- function(vetor){
+  vetor <- resultado$genres
+  split_genres <- strsplit(vetor, ", ")
   
-  all_genres <- c()
-  
-  # Iterate through each observation in the vector
-  for (observation in vector) {
-    # Convert the string representation of the list to an actual list
-    # Use gsub to replace single quotes with double quotes for JSON compatibility
-    observation <- gsub("'", "\"", observation)
-    
-    # Parse the JSON string into an R list
-    genres <- jsonlite::fromJSON(observation)
-    
-    # Extract the genre names and add them to the all_genres vector
-    all_genres <- c(all_genres, genres$name)
-  }
-  
-  # Get unique genres
-  unique_genres <- unique(all_genres)
-  
-  # Print the unique genres and the count
-  print("Unique Genres:")
-  print(unique_genres)
-  print(paste("Number of Unique Genres:", length(unique_genres)))
-  
-  binary_df <- data.frame(matrix(ncol = length(unique_genres), nrow = length(vector)))
+  unique_genres <- unique(unlist(split_genres))  # Extrai gêneros únicos
+  unique_genres <- unique_genres[!is.na(unique_genres)]  # Remove NA
+  binary_df <- data.frame(matrix(ncol = length(unique_genres), nrow = length(vetor)))
   colnames(binary_df) <- unique_genres
-  # Iterate through each observation in the vector
-  for (i in 1:length(vector)) {
-    # Convert the string representation of the list to an actual list
-    observation <- gsub("'", "\"", vector[i])
-    genres <- jsonlite::fromJSON(observation)
-    
-    # Extract the genre names
-    genre_names <- genres$name
-    
-    # For each unique genre, check if it's present in the observation
+  
+  # Fill the data frame with binary values
+  for (i in 1:length(vetor)) {
     for (genre in unique_genres) {
-      if (genre %in% genre_names) {
-        binary_df[i, genre] <- 1
-      } else {
-        binary_df[i, genre] <- 0
-      }
+      binary_df[i, genre] <- as.integer(genre %in% split_genres[[i]])
     }
   }
   
-  # Print the resulting data frame
-  print(binary_df)
-  
-  # Count the number of 1s in each column
-  count_ones <- colSums(binary_df)
-  
-  # Print the count of 1s for each variable
-  print(count_ones)
-  
-  # Identify variables with fewer than 100 1s
-  variables_to_remove <- names(count_ones[count_ones < 500])
-  
-  # Print the variables to be removed
-  print(paste("Variables to remove:", paste(variables_to_remove, collapse = ", ")))
-  
-  # Remove variables with fewer than 100 1s
-  binary_df_filtered <- binary_df[, count_ones >= 500]
-  
-  # Print the filtered data frame
-  print(binary_df_filtered)
-  
-  # Print the dimensions of the filtered data frame
-  print(paste("Filtered data frame dimensions:", nrow(binary_df_filtered), "rows x", ncol(binary_df_filtered), "columns"))
-  
-  return(binary_df)
+  # Add the original genre vector as a column
 }
+
 ```
 
 As variáveis "genres", "production_companies", production_countries e spoken_languages
 
 ```{r}
+library(tictoc)
 tic()
-dummies.genero <- separa_dummy(movies_metadata$genres)
+dummies.genero <- separa_dummy(resultado$genres)
 Sys.sleep(1)
 toc()
 tic()
@@ -172,6 +119,4 @@ toc()
 merged_df <- cbind((movies_metadata %>% select(-genres)), binary_df_filtered)
 
 ```
-
-
 

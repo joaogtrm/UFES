@@ -1,0 +1,177 @@
+---
+title: "Trabalho 2 Multivariada II"
+author: "João Gabriel Teixeira"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = F,message = F)
+```
+
+### Introdução
+
+```{r}
+library(readr)
+library(tidyverse)
+
+ratings <- read_rds("C:/Users/joao.g.moraes/Downloads/ratings.rds")
+movies_metadata <- read_rds("C:/Users/joao.g.moraes/Downloads/TMDB_movie_dataset_v11.rds") %>% rename(movieId=id)
+resultado <- left_join(ratings, movies_metadata, by = "movieid")
+```
+
+
+Esse trabalho consiste na criação de um sistema de recomendações de filmes utilizando Análise de Clusters. Temos uma base de dados com notas de 0 a 5 de reviews de espectadores, e outra que contém informações de 45466 filmes diferentes. Ela contém as seguintes variáveis :
+
+
+- **adult**: Indica se o filme é classificado como conteúdo adulto (por exemplo, filmes com temática adulta ou explícita).  
+- **belongs_to_collection**: Indica se o filme faz parte de uma coleção (por exemplo, uma série de filmes como "Harry Potter" ou "O Senhor dos Anéis").  
+- **budget**: Representa o orçamento do filme, ou seja, quanto dinheiro foi gasto para produzi-lo.  
+- **genres**: Lista os gêneros do filme (por exemplo, ação, comédia, drama, etc.).  
+- **homepage**: URL do site oficial do filme.  
+- **id**: Identificador único do filme.  
+- **imdb_id**: Código único do filme no IMDb (Internet Movie Database).  
+- **original_language**: Idioma original em que o filme foi produzido.  
+- **original_title**: Título original do filme (geralmente no idioma original).  
+- **overview**: Sinopse ou resumo do enredo do filme.  
+- **popularity**: Medida de popularidade do filme, calculada com base em algoritmos específicos.  
+- **poster_path**: Caminho ou URL do pôster do filme.  
+- **production_companies**: Lista das empresas responsáveis pela produção do filme.  
+- **production_countries**: Lista dos países onde o filme foi produzido.  
+- **release_date**: Data de lançamento do filme.  
+- **revenue**: Receita gerada pelo filme (ou seja, quanto dinheiro ele arrecadou).  
+- **runtime**: Duração do filme em minutos.  
+- **spoken_languages**: Lista dos idiomas falados no filme.  
+- **status**: Status do filme (por exemplo, "Lançado", "Em produção", etc.).  
+- **tagline**: Slogan ou frase de efeito do filme.  
+- **title**: Título do filme no idioma local ou traduzido.  
+- **video**: Indica se há um vídeo relacionado ao filme (por exemplo, um trailer).  
+- **vote_average**: Média das avaliações do filme (geralmente em uma escala de 0 a 10).  
+- **vote_count**: Número total de votos recebidos pelo filme.
+
+### Tratamento de dados 
+
+Primeiramente, vamos dar uma olhada na base de dados usando a função head()
+
+```{r}
+head(movies_metadata)
+```
+
+As variáveis "genres", "production_companies", production_countries e spoken_languages
+
+```{r}
+library(dplyr)
+library(summarytools)
+library(tictoc)
+tic()
+movies_metadata <- movies_metadata %>%
+  mutate(belongs_to_collection = case_when(
+    is.na(belongs_to_collection) | belongs_to_collection == "" ~ "NO",  # Se for NA ou string vazia, define como "NO"
+    TRUE ~ "YES"  # Caso contrário, define como "YES"
+  ))
+Sys.sleep(1)
+toc()
+freq(movies_metadata$belongs_to_collection)
+```
+
+```{r}
+separa_dummy <- function(vector){
+  vector <- movies_metadata$genres
+  
+  all_genres <- c()
+  
+  # Iterate through each observation in the vector
+  for (observation in vector) {
+    # Convert the string representation of the list to an actual list
+    # Use gsub to replace single quotes with double quotes for JSON compatibility
+    observation <- gsub("'", "\"", observation)
+    
+    # Parse the JSON string into an R list
+    genres <- jsonlite::fromJSON(observation)
+    
+    # Extract the genre names and add them to the all_genres vector
+    all_genres <- c(all_genres, genres$name)
+  }
+  
+  # Get unique genres
+  unique_genres <- unique(all_genres)
+  
+  # Print the unique genres and the count
+  print("Unique Genres:")
+  print(unique_genres)
+  print(paste("Number of Unique Genres:", length(unique_genres)))
+  
+  binary_df <- data.frame(matrix(ncol = length(unique_genres), nrow = length(vector)))
+  colnames(binary_df) <- unique_genres
+  # Iterate through each observation in the vector
+  for (i in 1:length(vector)) {
+    # Convert the string representation of the list to an actual list
+    observation <- gsub("'", "\"", vector[i])
+    genres <- jsonlite::fromJSON(observation)
+    
+    # Extract the genre names
+    genre_names <- genres$name
+    
+    # For each unique genre, check if it's present in the observation
+    for (genre in unique_genres) {
+      if (genre %in% genre_names) {
+        binary_df[i, genre] <- 1
+      } else {
+        binary_df[i, genre] <- 0
+      }
+    }
+  }
+  
+  # Print the resulting data frame
+  print(binary_df)
+  
+  # Count the number of 1s in each column
+  count_ones <- colSums(binary_df)
+  
+  # Print the count of 1s for each variable
+  print(count_ones)
+  
+  # Identify variables with fewer than 100 1s
+  variables_to_remove <- names(count_ones[count_ones < 500])
+  
+  # Print the variables to be removed
+  print(paste("Variables to remove:", paste(variables_to_remove, collapse = ", ")))
+  
+  # Remove variables with fewer than 100 1s
+  binary_df_filtered <- binary_df[, count_ones >= 500]
+  
+  # Print the filtered data frame
+  print(binary_df_filtered)
+  
+  # Print the dimensions of the filtered data frame
+  print(paste("Filtered data frame dimensions:", nrow(binary_df_filtered), "rows x", ncol(binary_df_filtered), "columns"))
+  
+  return(binary_df)
+}
+```
+
+As variáveis "genres", "production_companies", production_countries e spoken_languages
+
+```{r}
+tic()
+dummies.genero <- separa_dummy(movies_metadata$genres)
+Sys.sleep(1)
+toc()
+tic()
+dummies.production_companies <- separa_dummy(movies_metadata$production_companies)
+Sys.sleep(1)
+toc()
+tic()
+dummies.production_countries <- separa_dummy(movies_metadata$production_countries)
+Sys.sleep(1)
+toc()
+tic()
+dummies.spoken_languages <- separa_dummy(movies_metadata$spoken_languages)
+Sys.sleep(1)
+toc()
+merged_df <- cbind((movies_metadata %>% select(-genres)), binary_df_filtered)
+
+```
+
+
+
